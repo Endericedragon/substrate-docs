@@ -59,51 +59,41 @@
 
 这三分之二的多数节点确保了网络是容错的，并且可以承受一些网络参与者的不良行为，无论这些行为是故意的还是偶然的。
 
-## Blockchain economics
+## 区块链经济
 
-All blockchains require resources—processors, memory, storage, and network bandwidth—to perform operations.
-The computers that participate in the network—the nodes that produce blocks—provide these resources to blockchain users.
-The nodes create a distributed, decentralized network that serves the needs of a community of participants.
+所有区块链都需要资源来执行各种操作，例如处理器、内存、存储和网络带宽。参与网络的计算机（生产区块的节点）会向区块链用户提供这些资源。这些节点创建了一个分布式的、去中心化的网络，以满足网络用户（社区）的需求。
 
-To support a community and make a blockchain sustainable, most blockchains require users to pay for the network resources they use in the form of transaction fees.
-The payment of transaction fees requires user identities to be associated with accounts that hold assets of some type.
-Blockchains typically use tokens to represent the value of assets in an account and network participants purchase tokens outside of the chain through an exchange.
-Network participants can then deposit the tokens to enable them to pay for transactions.
+为了维护社区运转并使区块链可持续发展，大多数区块链要求用户以手续费的形式为他们使用的网络资源付费。要支付手续费，用户的身份就必须与持有某种类型资产的账户相关联。区块链通常使用“代币”来代表账户中的资产价值，用户通过“交易所”在链外购买代币。这样一来，用户就可以获得代币，为他们的交易付款了。
 
-## Blockchain governance
+## 区块链管理方法
 
-Some blockchains allow network participants to submit and vote on proposals that affect network operations or the blockchain community.
-By submitting and voting on proposals—referenda—the blockchain community can determine how the blockchain evolves in an essentially democratic process.
-On-chain governance is relatively rare, however, and to participate, a blockchain might require users to maintain a significant stake of tokens in an account or to be selected as a representative for other users.
+一些区块链允许用户就影响网络运营或区块链社区的问题提交提案，并为它们投票。通过提交和投票提案，区块链社区可以民主地决定区块链的发展方向。
 
-## Applications running on a blockchain
+然而，链上管理相对罕见；用户需要在账户中持有大量代币，或者被选为“用户代表”，才有可能参与管理。
 
-Applications that run on a blockchain—often referred to as decentralized applications or dApps—are typically web applications that are written using front-end frameworks but with backend **smart contracts** for changing the blockchain state.
+## 区块链上运行的应用程序
 
-A smart contract is a program that runs on a blockchain and executes transactions on behalf of users under specific conditions.
-Developers can write smart contracts to ensure that the outcome of programmatically-executed transactions is recorded and can't be tampered with.
-Yet, with smart contracts alone, developers don't have access to some underlying blockchain functionality—such as the consensus, storage, or transaction layers—and instead, abide by a chain's fixed rules and restrictions.
-Smart contract developers often accept these limitations as a tradeoff that enables faster development time with fewer core design decisions to make.
+运行在区块链上的应用程序（通常被称为去中心化应用程序或dapps）通常是使用前端框架编写的web应用程序，但它们能在后端使用智能合约来更改区块链状态。
 
-## Where to go next
+所谓智能合约，乃是在区块链上运行的程序，在特定条件下，它们能代表用户执行交易。开发人员可以编写智能合约，以确保程序执行的事务的结果被记录下来，并且不会被篡改。
 
-All blockchains share some common characteristics.
-Substrate—while not a blockchain itself—is a blockchain builders' toolkit with a modular framework of components to create a custom blockchain.
-With Substrate, you can take the common blockchain components—like storage and consensus and cryptography—and combine them to use the functions they provide as-is or modify them to suit the purpose of your project.
+然而，仅仅通过智能合约，开发人员无法访问一些底层的区块链功能——例如共识层、存储层或交易层——相反，开发人员必须遵守链的固定规则和限制。智能合约开发人员通常将这些限制作为一种权衡，以缩短开发时间，不必过多留意核心设计上的决策。
 
-You can explore the following resources to learn more.
+## 下一步该学什么？
 
-#### Tell me
+所有的区块链都有其共通之处。Substrate（虽然它本身不是个区块链）是一组区块链开发者的工具套件，提供了模块化的框架组件来创造个性化的区块链。有了Substrate的帮助，您就可以随意使用常见的区块链组件（例如存储，共识和加密组件），将它们加以组合甚至改进，以最佳地贴合您的需求。您可以参阅以下链接以了解更多信息。
 
-- [Fundamentals](/fundamentals/)
-- [Why Substrate?](/fundamentals/why-substrate/)
-- [Architecture](/fundamentals/architecture/)
-- [Networks and blockchains](/fundamentals/node-and-network-types/)
+#### 请告诉我更多！
 
-#### Guide me
+- [基础知识](/fundamentals/)
+- [为何选择Substrate？](/fundamentals/why-substrate/)
+- [架构](/fundamentals/architecture/)
+- [网络与区块链](/fundamentals/node-and-network-types/)
 
-- [Build a local blockchain](/tutorials/get-started/build-local-blockchain/)
-- [Simulate a network](/tutorials/get-started/simulate-network/)
-- [Add trusted nodes](/tutorials/get-started/add-trusted-nodes/)
+#### 请引导我实践！
 
-If you prefer to explore code directly, you can start building in the [Substrate Playground](https://docs.substrate.io/playground/) or consult the API reference to get details about the Rust crates you use.
+- [搭建本地区块链](/tutorials/get-started/build-local-blockchain/)
+- [模拟网络](/tutorials/get-started/simulate-network/)
+- [加入可信节点](/tutorials/get-started/add-trusted-nodes/)
+
+若您偏爱直接上手研究代码，请移步[Substrate Playground](https://docs.substrate.io/playground/)或者参阅API参考信息，以了解您将使用的Rust crates。
