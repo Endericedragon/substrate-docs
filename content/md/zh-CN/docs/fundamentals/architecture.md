@@ -1,79 +1,72 @@
 ---
-title: Architecture
-description: Introduces the core components of a Substrate node.
-keywords:
+标题：架构
+简介：介绍一个Substrate节点的核心组件。
+关键词：
 ---
 
-As noted in [Blockchain basics](/fundamentals/blockchain-basics), a blockchain relies on a decentralized network of computers—called nodes—that communicate with each other.
+正如我们在[区块链基础](/fundamentals/blockchain-basics)一章中所说，一个区块链依赖于去中心化的网络，在网络中，数台电脑（亦称为节点）之间可以相互通信。
 
-Because the node is a core component of any blockchain, it’s important to understand what makes a Substrate node unique, including the core services and libraries that are provided by default and how the node can be customized and extended to suit different project goals.
+由于任意区块链中必然包含节点这一核心概念，我们有必要了解让Substrate节点之于其他普通节点的独到之处，例如默认提供的核心服务和库，以及改造并拓展节点使之适用于多种工况的方法。
 
-## High level overview
+## 高层次概述
 
-In a decentralized network, all nodes act as both clients that request data and as servers that respond to requests for data.
-Conceptually and programmatically, the Substrate architecture divides operational responsibilities along similar lines.
-The following diagram illustrates this separation of responsibilities in simplified form to help you visualize the architecture and how Substrate provides a modular framework for building blockchains.
+在一个去中心化的网络中，所有的节点不仅充当客户端（向网络请求数据），也能发挥服务器的作用（对网络请求作出响应）。从概念上来说（同时也可以从编程的角度来说），Substrate架构也按照类似的方式划分节点的操作职责。
+
+下图简要说明了这种职责的划分，以帮助您直观了解Substrate架构，以及Substrate如何为构建区块链提供模块化框架。
 
 ![Substrate architecture](/media/images/docs/simplified-architecture.png)
 
-At a high level, a Substrate node provides a layered environment with two main elements:
+高层次概括地说，Substrate节点提供了一个层次化的环境，其中包含两个主要的元素：
 
-- A **client** with **outer node services** that handles network activity such as peer discovery, managing transaction requests, reaching consensus with peers, and responding to RPC calls.
+- 一个带有**外部节点服务**（outer node services）的**客户端**，用于处理网络活动，如发现对等节点、管理交易请求、与对等节点达成共识以及响应RPC调用。
 
-- A **runtime** that contains all of the business logic for executing the state transition function of the blockchain.
+- 一个包含了执行区块链的状态转换函数的所有业务逻辑的**运行时**。
 
-### Outer node
+### 外部节点
 
-The outer node is responsible for activity that takes place outside of the runtime.
-For example, the outer node is responsible for handling peer discovery, managing the transaction pool, communicating with other nodes to reach consensus, and answering RPC calls or browser requests from the outside world.
+外部节点负责运行时外部发生的活动。例如，外部节点负责发现对等节点、管理交易池、与其他节点通信以达成共识，以及响应来自“外部世界”的RPC调用或浏览器请求。
 
-Some of the most important activities that are handled by the outer node involve the following components:
+外层节点处理的一些最重要的活动包括以下几种：
 
-- [Storage](/fundamentals/state-transitions-and-storage/): The outer node persists the evolving state of a Substrate blockchain using a simple and highly efficient key-value storage layer.
+- [存储](/fundamentals/state-transitions-and-storage/): 使用简单高效的键值对存储层，保存Substrate区块链不断变化的状态。
 
-- [Peer-to-peer networking](/fundamentals/node-and-network-types/): The outer node uses the Rust implementation of the [`libp2p` network stack](https://libp2p.io/) to communicate with other network participants.
+- [点对点网络](/fundamentals/node-and-network-types/): 使用[libp2p` network stack](https://libp2p.io/)的Rust实现与其他的网络参与者通信。
 
-- [Consensus](/fundamentals/consensus/): The outer node communicates with other network participants to ensure they agree on the state of the blockchain.
+- [共识](/fundamentals/consensus/): 与其他网络参与者通信，以确保他们对区块链的状态达成共识。
 
-- [Remote procedure call (RPC) API](/build/remote-procedure-calls/): The outer node accepts inbound HTTP and WebSocket requests to allow blockchain users to interact with the network.
+- [Remote procedure call（RPC） API](/build/remote-procedure-calls/): 接收入站的HTTP和WebSocket请求，以便区块链用户与网络交互。
 
-- [Telemetry](/maintain/monitor/): The outer node collects and provides access to node metrics through an embedded [Prometheus](https://prometheus.io/) server.
+- [维护节点度量](/maintain/monitor/): 通过内嵌的[Prometheus](https://prometheus.io/)服务器收集并提供节点度量相关的信息。
 
-- [Execution environment](/build/build-process/): The outer node is responsible for selecting the execution environment—WebAssembly or native Rust—for the runtime to use then dispatching calls to the runtime selected.
+- [执行环境](/build/build-process/): 为运行时选择要使用的执行环境（WebAssembly或本地的Rust）然后将调用分派给所选的环境。
 
-Performing these tasks often requires the outer node to query the runtime for information or to provide information to the runtime.
-This communication is handled by calling specialized [runtime APIs](/reference/runtime-apis/).
+执行这些任务通常需要外部节点查询运行时以获取信息或向运行时提供信息。这种通信通过调用专门的[runtime APIs](/reference/runtime-apis/)来处理。
 
-### Runtime
+### 运行时
 
-The runtime determines whether transactions are valid or invalid and is responsible for handling changes to the blockchain's state transition function.
+运行时确定交易是否有效，并负责处理区块链的状态转换函数的更改。因为运行时能执行它接收到的函数，所以它可以控制如何将交易包含在区块中，以及如何将区块返回到外部节点以传播或导入到其他节点。从本质上讲，运行时负责处理区块链上发生的所有事情，它也是构建Substrate区块链节点的核心组件。
 
-Because the runtime executes the functions it receives, it controls how transactions are included in blocks and how blocks are returned to the outer node for gossiping or importing to other nodes.
-In essence, the runtime is responsible for handling everything that happens on-chain.
-It is also the core component of the node for building Substrate blockchains.
+Substrate运行时被设计成编译为[WebAssembly (Wasm)](/reference/glossary#webassembly-wasm)字节码的形式。这样的设计决策有如下益处：
 
-The Substrate runtime is designed to compile to [WebAssembly (Wasm)](/reference/glossary#webassembly-wasm) byte code.
-This design decision enables:
+- 支持无分叉的升级。
+- 多平台适配。
+- 可以检查运行时有效性。
+- 已验证可用于中继链共识机制。
 
-- Support for forkless upgrades.
-- Multi-platform compatibility.
-- Runtime validity checking.
-- Validation proofs for relay chain consensus mechanisms.
+与外部节点向运行时提供信息的方式类似，运行时使用专门的[主机函数（host function）](https://paritytech.github.io/substrate/master/sp_io/index.html)与外部节点或外部世界通信。
 
-Similar to how the outer node has a way to provide information to the runtime, the runtime uses specialized [host functions](https://paritytech.github.io/substrate/master/sp_io/index.html) to communicate with the outer node or the outside world.
+## 轻量级（light）客户端节点
 
-## Light client nodes
+轻量级客户端或轻量级节点是Substrate节点的简化版本，仅提供运行时和当前状态。它允许用户使用浏览器、浏览器扩展、移动设备或家用电脑直接连接到Substrate运行时。
 
-A light client or light node is a simplified version of a Substrate node that only provides the runtime and current state.
-Light nodes enable users to connect to a Substrate runtime directly using a browser, browser extension, mobile device, or desktop computer.
-With a light client node, you can use RPC endpoints written in Rust, JavaScript, or other languages to connect to the WebAssembly execution environment to read block headers, submit transactions, and view the results of transactions.
+有了轻量级客户端节点，您就可以使用用Rust、JavaScript或其他语言编写的RPC端口（endpoint）连接到WebAssembly执行环境，以读取区块头（block header）、提交交易并查看其的结果。
 
-## Where to go next
+## 下一步学什么？
 
-Now that you have an overview of the Substrate architecture and core node components, explore the following topics to learn more.
+在您已经对Substrate体系结构和核心节点组件有了基本的认知后，我们建议参阅以下主题以了解更多信息：
 
-- [Networks and blockchains](/fundamentals/node-and-network-types)
-- [Transactions and block basics](/fundamentals/transaction-types)
-- [Transaction lifecycle](/fundamentals/transaction-lifecycle/)
-- [State transitions and storage](/fundamentals/state-transitions-and-storage/)
+- [网络和区块链](/fundamentals/node-and-network-types)
+- [交易和区块基础](/fundamentals/transaction-types)
+- [交易生命周期](/fundamentals/transaction-lifecycle/)
+- [状态转变和存储](/fundamentals/state-transitions-and-storage/)
 - [Runtime APIs](/reference/runtime-apis/)

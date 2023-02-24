@@ -1,83 +1,69 @@
 ---
-title: What is Substrate?
-description: Explains the core principles behind the design of Substrate and how the design decisions informed the technologies used.
-keywords:
+标题：Substrate是什么？
+简介：介绍我们在设计Substrate时遵循的核心原则1，以及这些准则是如何影响我们选择技术栈的。
+关键词：
 ---
 
-[Why Substrate](/fundamentals/why-substrate/) introduced some of the core characteristics and benefits of the Substrate development environment.
-If those benefits—flexibility, open source, interoperability, and upgradeability—are important to you, you might want to dig deeper into what Substrate is and into why it's designed the way it is.
-With this in mind, let's look more closely at what Substrate is.
+[为什么选择Substrate？](/fundamentals/why-substrate/) 介绍了一些Substrate开发环境的核心特点和优势。
 
-## Multi-chain vision
+如果这些优势（灵活性、开源、可协作和可升级性）对您很重要，那么您一定会想知道Substrate是什么，以及我们为何如此设计它的。
 
-Substrate is a Rust-based framework for building blockchain applications using modular and extensible components to support a multi-chain block space.
-An important part of learning how to use this framework is understanding that it envisions and embraces a multi-chain universe.
-Instead of a single chain with limited features and scalability, Substrate is designed to allow for specialization, optimization, and scalability.
-In this vision of the future—a multi-chain future—blockchains are specialized for different purposes and built to address specific problems or use cases.
-Substrate is designed to make blockchains easy to customize and upgrade, so that projects can evolve over time and adapt to new opportunities. 
-Instead of a single dominant chain with an inflexible protocol, Substrate is designed to allow for experimentation, coordination, and collaboration across multiple chains.
+话不多说，让我们进入正题吧。
 
-But if the future of the blockspace consists of many different blockchains performing specialized tasks, how does one go about building those blockchains?
-Building a blockchain from scratch is expensive, time-consuming, and error-prone. It requires an investment of capital and advanced expertise in multiple technologies and disciplines, Making mistakes can be prohibitively costly.
-It is, inherently, not for the faint of heart.
+## 多链视角
 
-With so many barriers to entry, how then is a multi-chain future possible?
-And if you were to overcome all of these difficulties to build a blockchain, how would you upgrade it to keep it relevant as society and technology evolve? 
+Substrate是一个基于rust的框架，它使用模块化和可扩展的组件构建区块链应用程序，以支持多链的区块空间（multi-chain block space）。学习如何使用这个框架的重点在于理解这个概念：Substrate设想并包含了一个“多链宇宙”（multi-chain universe）。
 
-## Core design principles
+Substrate不是一个功能受限，可拓展性差的单链；相反，它专门设计为能够满足特定领域的细分需求，并具有相当的可优化和可扩展性。未来，在这样多链结构的加持下，区块链可以广泛用于不同的应用场景，并用于解决特定的问题或用例。
 
-Before Substrate, a lot of resources were expended trying to get this blockchain of the multi-chain future right, trying to build a blockchain that was future-proof and upgradeable, with all the right components.
-All of that work—time, money, and energy—resulted in a realization that well thought-out choices made today would likely become the mistakes of tomorrow. If the blockchain relied on some specific technology or assumption, over time that technology or assumption would likely hamper and, ultimately, stifle innovation. 
-That realization, along with the need to provide tools for a multi-chain future, led to the development of Substrate. The following defining principles emerged as core design decisions for the Substrate framework:
+Substrate旨在使区块链易于定制和升级，以便项目可以随着时间的推移而发展以紧跟潮流。与使用不甚灵活的协议的单一主导链不同，Substrate的设计允许跨多个链进行实验、协调和协作。
 
-- Rust as the core programming language for the codebase.
-- WebAssembly as an execution environment for application logic.
-- Extensive use of layered abstractions, generic implementations, and flexible application programming interfaces as primary coding practices and the separation of libraries into distinct architectural components.
+但是，如果区块空间由许多不同的区块链组成，执行特定的任务，我们应当如何构建这些区块链呢？从头构建多链非常昂贵、耗时，而且容易出错。它需要在多个技术和学科上的金钱投资和先进的专业知识，犯错的代价可能会令人望而却步。这样的代价对于大多数不愿冒进的人来说可谓不可接受。
 
-Each of these design decisions plays an important role in how Substrate operates and how you can use Substrate to build specialized composable blockchains using reusable and customizable components.
+有如此高的准入门槛，那么多链结构的未来应当何去何从？如果我们要克服所有这些困难来建造一个区块链，应当如何升级它以保持它与社会和技术发展的相关性?
 
-## Why Substrate uses Rust
+## 核心设计原则
 
-There are several important benefits that are the direct result of selecting Rust as the underlying programming language for the Substrate framework.
-Although it might be somewhat more complex to learn, Rust is a highly performant system-level programming language designed for building bullet-proof, mission-critical, and production-grade software.
+在Substrate之前，人们花费了大量的资源，试图设计一个多链结构的未来区块链，建立一个具有所有正确组件的、面向未来的、可升级的区块链。然而，所有这些花费的时间、金钱和精力最终导向了一个结论：当下做出的深思熟虑的选择很可能成为未来的绊脚石。如果区块链依赖于某种特定的技术或假设，随着时间的推移，这种技术或假设可能会阻碍并最终扼杀创新。
 
-- Rust has a sophisticated memory management system that relies on ownership rules rather than memory allocation and garbage collection. 
-   These ownership rules enable the compiler to verify every variable you use and every memory address you reference to avoid memory leaks.
+以上结论，以及为未来的多链提供工具的需求，促成了Substrate的问世。以下定义原则是Substrate框架的核心设计决策:
 
-- The Rust compiler also prevents you from introducing the kinds of coding mistakes that make systems vulnerable.
+- 将Rust作为代码库的核心编程语言。
+- 将WebAssembly作为应用程序逻辑的执行环境。
+- 广泛使用分层抽象、泛型实现和灵活的API作为主要的编码实践，并将库分离为不同的体系结构组件（architecture component）。
 
-- Rust provides abstractions—like traits and generics—that make code more flexible without imposing performance overhead. 
+以上设计决策，都在Substrate的运作方式以及通过可重用和可定制的组件构建专门的可组合区块链方面，发挥着重要作用。
 
-- The compiler performs static checks on your application source code while the code is being compiled. 
-   When you execute the compiled code, the performance is comparable to the fastest programming languages currently available.
+## Substrate为何选择了Rust？
 
-- Compiled Rust code has a relatively small footprint and can run on embedded devices with support for any operating system.
+尽管学习起来可能有些复杂，选择Rust作为Substrate框架的底层编程语言有几个重要的好处，它是一种高性能的系统级编程语言，用于构建高鲁棒性、关键性（mission-critical）的生产级软件：
 
-In addition to all of these other benefits, Rust code can be compiled to WebAssembly and WebAssembly is at the heart of what makes Substrate flexible and its runtime upgradeable.
+- Rust有一个复杂的内存管理系统，它依赖于所有权规则，而不是手动内存分配和垃圾收集。这些所有权规则使编译器能够正确处理您使用的每个变量和引用的每个内存地址，以避免内存泄漏。
+  
+- Rust编译器可以防止引入存在潜在安全漏洞的编码错误。
 
-## WebAssembly and upgradeability
+- Rust提供了抽象——比如特征和泛型——使代码更加灵活，而不会增加性能开销。执行经过编译的程序时，其性能可与目前最快的编程语言相媲美。
 
-Most components in a Substrate blockchain are customizable or support multiple implementations for maximum flexibility.
-However, storing the application logic onchain as a WebAssembly binary is one of the few attributes of Substrate that you can’t change.
+- 编译后的Rust代码占用空间相对较小，可以在支持任意操作系统的嵌入式设备上运行。
 
-If you don't use WebAssembly for the application logic, you're no longer using Substrate.
-Substrate-based chains are designed to be upgradable by default. 
-This is made possible by encoding the application logic of your blockchain—the specialized business logic—as a WebAssembly binary and storing that binary as a part of the blockchain state. 
-In the same way you can execute a transaction to change an account balance, you can execute a transaction to change the WebAssembly code. 
-After the block containing that transaction is produced, the next block reflects the updated blockchain state.
+除了所有这些好处之外，Rust代码还可以编译为WebAssembly，而WebAssembly是使Substrate拥有灵活性和运行时可升级性的核心。
 
-## Abstractions and generics
+## WebAssembly和可升级性
 
-In addition to the core application logic in the WebAssembly binary, there are many other components of a Substrate-based blockchain that you can customize. 
-For example, there are multiple implementations for the consensus, networking, and database layers, including support for the following:
+Substrate区块链中的大多数组件都是可定制的，或者支持多种实现以获得最大的灵活性。但是，将程序逻辑以WebAssembly二进制文件的形式存储在区块链上是少数几个不能更改的Substrate属性之一。如果您没有使用WebAssembly来表达程序逻辑，那么您使用的就不再是Substrate了。基于Substrate的区块链拥有与生俱来的可升级性。
 
-- Multiple consensus engines (BABE/Grandpa/AURA)
-- Multiple network protocols (QUIC, TCP)
-- Multiple database implementations (ParityDB, RocksDB)
+这是通过将区块链的应用程序逻辑（专门的业务逻辑）编码为WebAssembly二进制文件，并将该文件存储为区块链状态的一部分来实现的。就像您可以发起一个交易来更改帐户余额一样，您也可以发起一个更改WebAssembly代码的交易。在生成包含该交易的区块之后，下一个区块将能反映更新后的区块链状态。
 
-In the Polkadot ecosystem, there are numerous examples of parachain projects that have customized different aspects of the Substrate node. 
-In many cases, those ecosystem applications require access to the core components of the chain—such as the consensus layer or transaction pool—wouldn’t be possible if they were written as smart contract applications.
-At the application layer, you have even more flexibility. 
-For example, you can choose between an accounts-based ledger format or UTXO. 
-You have full control over how to implement transaction fees or define custom incentives around resource usage.
-With Substrate, you can build virtually any type of blockchain you can imagine by customizing and extending the framework to suit your needs.
+## 抽象与泛化
+
+除了WebAssembly二进制文件中的核心应用程序逻辑之外，您还可以定制许多其他基于Substrate的区块链的组件。例如，共识层、网络层和数据库层均存在多种实现，包括:
+
+- 多种共识引擎（BABE/Grandpa/AURA）
+- 多种网络协议（QUIC，TCP）
+- 多种数据库实现（ParityDB，RocksDB）
+
+在Polkadot的生态中，有许多对Substrate节点进行定制了的平行副链项目示例。在许多情况下，这些生态中的应用程序有访问链的核心组件（如共识层或交易池）的需求；如果它们被编写为智能合约应用程序，就不可能实现。
+
+在网络的应用层中，您甚至拥有更大的灵活性。例如，您可以在基于帐户的分类帐格式（account-based ledger）或UTXO格式之间进行选择。无论是交易手续费的实现，还是定义围绕资源使用的自定义激励措施，掌控权均在您手中。
+
+综上所述，使用Substrate，您可以通过定制和扩展框架来满足您的需求，从而构建您可以想象的任何类型的区块链。
