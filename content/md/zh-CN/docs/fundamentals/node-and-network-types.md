@@ -1,101 +1,77 @@
 ---
-title: Networks and blockchains
-description: Describes network types and deployment scenarios.
-keywords:
+标题：网络与区块链
+简介：介绍网络分类及其部署场景
+关键词：
 ---
 
-When thinking about building a blockchain, it's useful to consider that boundaries are what define a network.
-For example, a set of computers connected to a single router can be considered a home network.
-A firewall might be the boundary that defines an enterprise network.
-Smaller, isolated networks can be connected to wider area networks through a common communication protocol.
-Similarly, you can think of a blockchain network as being defined by its boundaries and its isolation from or communication with other blockchains.
 
-As a blockchain builder's toolkit, Substrate enables you to develop any type of blockchain you can imagine and to define its boundaries based on your application-specific requirements. With this flexibility in mind, one of the decisions you need to make is the type of network you want to build and the role that different nodes might play in that network.
 
-## Network types
+在考虑构建区块链时，我们必须要认识到：定义一个网络离不开边界（boundaries）这一概念。例如，连接到单个路由器的一组计算机可以被认为是一个家庭网络，而防火墙可能是企业网络的边界。通过公共通信协议，较小的孤立网络也可以连接到更大型的网络。
 
-Substrate-based blockchains can be used in different types of network architecture.
-For example, Substrate blockchains are used to build the following network types:
+类似地，我们可以认为，区块链网络乃是由其边界，和与其他区块链的关系（孤立、或有所通信）定义的。
 
-- **Private networks** that limit access to a restricted set of nodes.
-- **Solo chains** that implement their own security protocol and don't connect or communicate with any other chains.
-  Bitcoin and Ethereum are examples of non-Substrate based solo chains.
-- **Relay chains** that provide decentralized security and communication for other chains that connect to them.
-  Kusama and Polkadot are examples of relay chains.
-- **Parachains** that are built to connect to a relay chain and have the ability to communicate with other chains that use the same relay chain.
-  Because parachains depend on the relay chain to finalize the blocks produced, parachains must implement the same consensus protocol as the relay chain they target.
+作为区块链工程师的工具包，Substrate能够用于开发您能想到的任何类型的区块链，并根据特定于应用程序的需求定义其边界。考虑到这种灵活性，您需要决定您想要构建的网络类型是什么，以及不同节点在该网络中可能扮演的角色。
 
-## Node types
+## 网络类型
 
-Blockchains require network nodes to be synchronised to present a consistent and up-to-date view of the blockchain state.
-Each synchronised node stores a copy of the blockchain and keeps track of incoming transactions.
-However, keeping a full copy of an entire blockchain requires a lot of storage and computing resources and downloading all of the blocks from genesis to the most recent isn’t practical for most use cases.
-To make it easier to maintain the security and integrity of the chain but reduce the resource requirements for clients wanting access to blockchain data, there are different types of nodes that can interact with the chain:
+基于Substrate的区块链可用于不同类型的网络架构，例如下列的数种：
 
-- [Full nodes](#full-nodes)
-- [Archive nodes](#archive-nodes)
-- [Light client nodes](#light-client-nodes)
+- **私有网络** 仅能访问受限的数个节点的网络。
+- **单链网络** 拥有各自的安全协议实现，并不与其他区块链网络通信。比特币和以太坊就是这样的网络，不过他们不基于Substrate开发。
+- **中继链（Relay chains）网络** 为连接到它们的其他网络提供去中心化的安全保障和通信机制。
+- **平行多链（Parachains）网络** 为连接到中继链而生，也能与使用同一个中继链的其他网络通信。因为平行多链依赖中继链来封装产生的区块，所以平行多链必须使用与它们的目标中继链相同的共识协议。
 
-### Full nodes
+## 节点类型
 
-Full nodes are a critical part of the blockchain network infrastructure and are the most common node type.
-Full nodes store blockchain data and, typically, participate in common blockchain operations, such as authoring and validating blocks, receiving and verifying transactions, and serving data in response to user requests.
+区块链要求网络节点同步，以呈现一致且最新的区块链状态视图。每个同步节点存储区块链的副本，并跟踪收到的交易。然而，保存整个区块链的完整副本需要大量的存储空间和计算量，并且下载从创世块到最新区块的所有区块对于大多数区块链的应用场景来说是不实际的。
+
+为了更容易维护链的安全性和完整性，同时减少想要访问区块链数据的客户端对资源的消耗，有不同类型的节点可以与链交互:
+
+- [完全节点（Full nodes）](#full-nodes)
+- [归档节点（Archive nodes）](#archive-nodes)
+- [轻量级客户端节点（Light client nodes）](#light-client-nodes)
+
+### 完全节点
+
+完全节点是区块链网络基础设施的关键部分，也是最常见的节点类型；其负责存储区块链数据，并且一般会参与常见的区块链操作，例如创建和验证区块，接收和验证交易，以及响应用户请求。
 
 ![Full node](/media/images/docs/full-node.png)
 
-By default, full nodes are configured to store only the most recent 256 blocks and to discard state older than that—with the exception of the genesis block—to prevent the full node from growing indefinitely and consuming all available disk space.
-You can configure the number of blocks a full node retains.
+默认情况下，完全节点被配置为只存储最近的256个块，并丢弃比这更早的状态（创世块除外），以防止全节点无限增长进而消耗所有的磁盘空间。不过，我们也可以配置完全节点保留的区块数量。
 
-Although older blocks are discarded, full nodes retain all of the [block headers](/reference/glossary/#header) from the genesis block to the most recent block to validate that the state is correct.
-Because the full node has access to all of the block headers, it can be used to rebuild the state of the entire blockchain by executing all of the blocks from the genesis block.
-Thus it requires much more computation to retrieve information about some previous state, and an archive should generally be used instead.
+虽然较久远的区块被丢弃了，但完全节点会保留从创世块到最近区块的所有[块报头](/reference/glossary/#header)，以对状态的正确性进行验证。完全节点可以访问所有的块标头，所以可以通过执行从创世块开始的所有块（executing all of the blocks from the genesis block）来重建整个区块链的状态。检索有关过往状态的信息需要很大的计算量，故通常应该使用存档以代替上述过程。
 
-Full nodes allow you to read the current state of the chain and to submit and validate transactions directly on the network.
-By discarding state from older blocks, a full node requires much less disk space than an archive node.
-However, a full node requires far more computational resources to query and retrieve information about some previous state.
-If you need to query historical blocks, you should purge the full node then restart it as an archive node.
+完完全节点允许您读取链的当前状态，并直接在网络上提交和验证交易。由于丢弃了久远区块中的状态，完整节点所需的磁盘空间比归档节点少得多。不过，一个完全节点需要更多的计算资源来查询和检索关于某些先前状态的信息。如果需要查询历史区块，应该清空这个完全节点，然后将其作为存档节点重新启动。
 
-### Archive nodes
+### 归档节点
 
-Archive nodes are similar to full nodes except that they store all past blocks with complete state available for every block.
-Archive nodes are most often used by utilities—such as block explorers, wallets, discussion forums, and similar applications—that need access to historical information.
+归档节点类似于完全节点，不过它们会存储所有过去的区块，每个区块都存储有完整的状态信息。这种节点往往在需要访问历史信息的场景下使用（如块浏览器、钱包、论坛和类似的应用程序）。
 
 ![Archive nodes](/media/images/docs/archive-node.png)
 
-Because archive nodes retain historical state, they require a lot of disk space.
-Because of the disk space required to run them, archive nodes are less common than full nodes.
-However, archive nodes make it convenient to query the past state of the chain at any point in time.
-For example, you can query an archive node to look up an account balance in a certain block or to see details about a transaction resulted in a specific state change.
-These types of queries are faster and more efficient when you run them on the data in an archive node.
+由于归档节点保存着历史状态，它们将消耗大量磁盘空间，这也是它们不如完全节点常见的原因。不过，归档节点可以方便地查询区块链在任何时间点的过去状，例如查找某个区块中的帐户余额，或者查看导致指定状态更改的交易的详细信息。当在归档节点存储的数据上运行这些类型的查询时，它们会更快、更高效。
 
-### Light client nodes
+### 轻量级客户端节点
 
-Light client nodes enable you to connect to a Substrate network with minimal hardware requirements.
+轻量级客户端节点使您能够以最低的硬件要求连接到Substrate网络。
 
 ![Light client nodes](/media/images/docs/light-node.png)
 
-Because light client nodes require minimal system resources, they can be embedded into web-based applications, browser extensions, mobile device applications, or internet of things (IoT) devices.
-Light client nodes provide a runtime and access to the current state through RPC endpoints.
-The RPC endpoints for light client nodes can be written in Rust, JavaScript, or other languages and used to read block headers, submit transactions, and view the results of transactions.
+因为轻量级客户端节点需要的系统资源最少，所以它们可以嵌入到基于web的应用程序、浏览器扩展、移动设备应用程序或物联网（IoT）设备中。这类节点通过RPC端口提供运行时和对当前链状态的访问。轻量级客户端节点的RPC端口可以用Rust、JavaScript或其他语言编写，用于读取区块头、提交交易和查看其结果。
 
-Light client nodes don't participate in blockchain or network operations.
-For example, light client nodes aren't responsible for block authoring or validation, gossipping transactions or reaching consensus.
-The light client node doesn't store any past blocks, so it can't read historical data without requesting it from a node that has it.
+轻量级客户端节点不参与区块链和网络操作。例如，轻客户端节点不负责产生或验证区块，也不会传播交易或达成共识。它们也不会存储任何过去的块，因此如果不向拥有历史数据的节点请求，它就无法读取历史数据。
 
-## Node roles
+## 节点规则（Node roles）
 
-Depending on the command-line options you specify when you start a node, nodes can play different roles in the progression of the chain and can provide different levels of access to the on-chain state.
-For example, you can limit the nodes that are authorized to author new blocks and which nodes can communicate with peers.
-Peer nodes that aren't authorized as block producers can import new blocks, receive transactions, and send and receive gossip about new transactions to other nodes.
-Nodes can also be prevented from connecting to the broader network and restricted to communicating with specific nodes.
+根据启动节点时指定的命令行选项，节点可以在区块链的运行过程中扮演不同的角色，并可以提供对链上状态的不同级别的访问。例如，您可以指定哪些节点有权生产新区块，哪些节点可以与对等节点通信。未被授权生产区块的对等节点可以导入（import）新区块，接收交易，并向其他节点发送和接收有关新交易的消息（gossip）。除此之外，您还可以阻止节点连接到更广泛的网络，并限制节点与特定节点通信。
 
-## Where to go next
+## 下一步学什么？
 
-You can use Substrate to build virtually any type of network—from a completely self-contained and private solo-chain to your own relay chain ecosystem or compatible parachains.
+您可以使用Substrate构建几乎任何类型的网络——从完全自包含的私有单链到您自己的中继链生态系统或兼容的平行副链。
 
-To take a deeper dive into networks and nodes types, explore the following topics.
+请参阅以下页面，以更深入地研究网络和节点类型：
 
-- [Build a local blockchain](/tutorials/get-started/build-local-blockchain/)
-- [Simulate a network](/tutorials/get-started/simulate-network/)
-- [Add trusted nodes](/tutorials/get-started/add-trusted-nodes/)
-- [Authorize specific nodes](/tutorials/get-started/authorize-specific-nodes/)
+- [构建本地链](/tutorials/get-started/build-local-blockchain/)
+- [模拟网络](/tutorials/get-started/simulate-network/)
+- [添加可信节点](/tutorials/get-started/add-trusted-nodes/)
+- [认证指定节点](/tutorials/get-started/authorize-specific-nodes/)

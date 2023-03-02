@@ -41,7 +41,7 @@ Before you start building, though, you want to make sure you are in the right pl
 
 - [账户、地址与密钥](/fundamentals/accounts-addresses-keys/) 介绍了账户、地址与密钥的相互关系以及它们的用途。
 
-- [为Substrate所用的Rust](/fundamentals/rust-basics/) 强调了Rust特有的traits（特征）、泛型，关联类型和宏。熟练掌握这些知识，您就能顺利第构建基于Substrate的区块链了。
+- [为Substrate所用的Rust](/fundamentals/rust-basics/) 强调了Rust特有的traits（特征）、泛型，关联类型和宏。熟练掌握这些知识，您就能顺利地构建基于Substrate的区块链了。
 
 - [离链操作](/fundamentals/offchain-operations/) 揭示了一部分操作最好离链操作的原因，以及它们的平替。
 
